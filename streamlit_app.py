@@ -47,17 +47,6 @@ if ingredients_list:
         st.success('Your Smoothie is ordered, ' + name_on_order +'!', icon="✅")
 
 import requests
-
-st.write("✅ Reached API section (before GET)")
-
-try:
-    smoothiefroot_response = requests.get(
-        "https://my.smoothiefroot.com/api/fruit/watermelon",
-        timeout=10
-    )
-    st.write("✅ After GET (request returned)")
-    st.write(smoothiefroot_response)        # should show <Response [200]> if allowed
-    st.text(smoothiefroot_response.text[:500])  # show some content
-except Exception as e:
-    st.error(f"❌ API call failed: {e}")
+smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")
+st.text(smoothiefroot_response)
 
