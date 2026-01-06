@@ -5,6 +5,38 @@ from snowflake.snowpark.functions import col
 
 import requests
 
+st.title("✅ App loaded")
+st.write("If you can see this, Streamlit is running.")
+
+try:
+    cnx = st.connection("snowflake")
+    st.success("✅ Snowflake connection object created")
+
+    session = cnx.session()
+    st.success("✅ Snowflake session created")
+
+    # Check table exists and has rows
+    fruit_table = session.table("SMOOTHIES.PUBLIC.FRUIT_OPTIONS")
+    fruit_count = fruit_table.count()
+    st.write("🍓 Fruit table row count:", fruit_count)
+
+    # Pull fruit names into a Python list
+    fruit_rows = fruit_table.select(col("FRUIT_NAME")).collect()
+    fruit_list = [r["FRUIT_NAME"] for r in fruit_rows]
+    st.write("🍍 First 5 fruits:", fruit_list[:5])
+
+    ingredients_list = st.multiselect(
+        "Choose up to 5 ingredients:",
+        fruit_list,
+        max_selections=5
+    )
+
+    st.write("✅ Selected:", ingredients_list)
+
+except Exception as e:
+    st.error("❌ Something failed before the dropdown loaded.")
+    st.exception(e)
+  
 # Write directly to the app
 st.title(f":cup_with_straw: Customize Your Smoothie! :cup_with_straw: {st.__version__}")
 st.write(
